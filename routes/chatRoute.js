@@ -1,24 +1,19 @@
-import express from "express"
-import { retrieveContext } from "../services/retrieveContext.js"
-import { model } from "../config/llm.js";
-
+import express from "express";
+import { askQuestion } from "../services/ragService.js";
 
 const router = express.Router();
 
-router.post("/ask", async(req,res) => {
+router.post("/ask", async (req, res) => {
     try {
-        const {question} = req.body;
+        const { question } = req.body;
+        const result = await askQuestion(question);
 
-        const context =  await retrieveContext(question);
-        const prompt = `You are a helpful assistant.Answer the user's question using only the context below.Context: ${context.join("\n\n")} Question:${question}`;
-        const response = await model.invoke(prompt);
-
-
-        res.set("Content-Type","text/plain")
-        res.send(`Question: ${question}\nAnswer: ${response.content}`);
-    } catch(error) {
-        res.status(500).json({error: error.message});
+        res.set("Content-Type", "text/plain");
+        res.send(`Source: ${result.source}\n\nQuestion: ${result.question}\nAnswer: ${result.answer}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
     }
-})
+});
 
 export default router;
