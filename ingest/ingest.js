@@ -1,29 +1,31 @@
-import fs from "fs";
-import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import { embeddings } from "../config/embedding.js";
-import { client, COLLECTION_NAME } from "../config/chroma.js";
+// import fs from "fs";
+// import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+// import { embeddings } from "../config/embedding.js";
+// import { client, COLLECTION_NAME } from "../config/chroma.js";
+// import {loadDocument} from "../loaders/documentLoader.js"
 
-const text = fs.readFileSync("data/data.txt", "utf8");
 
-const splitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 500,
-  chunkOverlap: 50,
-});
+// const docs = await loadDocument("data/sample.pdf");
 
-const docs = await splitter.createDocuments([text]);
+// const splitter = new RecursiveCharacterTextSplitter({
+//   chunkSize: 500,
+//   chunkOverlap: 50,
+// });
 
-const texts = docs.map(doc => doc.pageContent);
+// const splitDocs = await splitter.splitDocuments(docs);
 
-const vectors = await embeddings.embedDocuments(texts);
+// const texts = splitDocs.map(doc => doc.pageContent);
 
-const collection = await client.getOrCreateCollection({
-  name: COLLECTION_NAME,
-});
+// const vectors = await embeddings.embedDocuments(texts);
 
-await collection.add({
-  ids: docs.map((_, i) => `doc-${i}`),
-  documents: texts,
-  embeddings: vectors,
-});
+// const collection = await client.getOrCreateCollection({
+//   name: COLLECTION_NAME,
+// });
 
-console.log("Documents stored successfully");
+// await collection.add({
+//   ids: docs.map((_, i) => `doc-${i}`),
+//   documents: texts,
+//   embeddings: vectors,
+// });
+
+// console.log("Documents stored successfully");

@@ -1,20 +1,20 @@
-import { model } from "./config/llm.js";
-import { retrieveContext } from "./retrieval/query.js";
+// import { model } from "./config/llm.js";
+// import { retrieveContext } from "./retrieval/query.js";
 
-const question = "What is Express?";
+// const question = "What is Express?";
 
-const context = await retrieveContext(question);
+// const context = await retrieveContext(question);
 
-const prompt = `
-Answer the question using only the provided context.
+// const prompt = `
+// Answer the question using only the provided context.
 
-Context:
-${context}
+// Context:
+// ${context}
 
-Question:
-${question}
-`;
+// Question:
+// ${question}
+// `;
 
-const response = await model.invoke(prompt);
+// const response = await model.invoke(prompt);
 
-console.log(response.content);
+// console.log(response.content);
