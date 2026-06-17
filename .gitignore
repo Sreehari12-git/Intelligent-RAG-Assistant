@@ -1,0 +1,53 @@
+# Node modules
+node_modules/
+
+# Environment variables (API keys, secrets)
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime files
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+jspm_packages/
+
+# Build output
+dist/
+build/
+
+# Coverage reports
+coverage/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Package manager files (optional)
+# package-lock.json
+# yarn.lock
+
+# LangChain / vector database files (if generated locally)
+chroma/
+chromadb/
+*.sqlite3
+
+# Cache files
+.cache/
