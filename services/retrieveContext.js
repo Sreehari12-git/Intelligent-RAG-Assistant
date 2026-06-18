@@ -16,6 +16,6 @@ export async function retrieveContext(question) {
 
     console.log("Distances:", distances);  
 
-    const DISTANCE_THRESHOLD = 1.0;
+    const DISTANCE_THRESHOLD = 0.7;
     return docs.filter((doc, i) => distances[i] < DISTANCE_THRESHOLD);
 }
