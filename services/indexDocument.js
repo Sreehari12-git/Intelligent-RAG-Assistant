@@ -23,6 +23,5 @@ export async function indexDocument(docs) {
     });
 
     return splitsDocs.length;
-
 }
 
