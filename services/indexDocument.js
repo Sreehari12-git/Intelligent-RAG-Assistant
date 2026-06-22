@@ -1,6 +1,8 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { embeddings } from "../config/embedding.js";
 import { getCollection } from "../config/chroma.js";
+import { v4 as uuidv4 } from "uuid";
+
 
 export async function indexDocument(docs) {
     const splitter = new RecursiveCharacterTextSplitter({
@@ -17,7 +19,7 @@ export async function indexDocument(docs) {
     const collection = await getCollection();
 
     await collection.add({
-        ids: splitsDocs.map((_, i) => `chunk-${Date.now()}-${i}`),
+        ids: splitsDocs.map(() => uuidv4()),
         documents: texts,
         embeddings: vectors,
     });

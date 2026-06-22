@@ -17,17 +17,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });  
 
-router.post("/upload", upload.single("file"), async (req, res) => {
+router.post("/upload", upload.array("files",10), async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: "No file uploaded." });
     }
 
-    const filePath = req.file.path;
-    console.log("File saved at:", filePath); 
+    // const filePath = req.file.path;
+    // console.log("File saved at:", filePath); 
 
-    const docs = await loadDocument(filePath);
-    const totalChunks = await indexDocument(docs);
+    // const docs = await loadDocument(filePath);
+    // const totalChunks = await indexDocument(docs);
+
+    let totalChunks = 0;
+    for(const file of req.files) {
+      const filePath = file.path;
+      console.log("File saved at : ", filePath);
+      const docs = await loadDocument(filePath);
+      const chunks = await indexDocument(docs);
+      totalChunks += chunks;
+    }
     console.log(`Stored ${totalChunks} chunks`);
 
     res.json({ message: "Document indexed successfully", chunks: totalChunks });

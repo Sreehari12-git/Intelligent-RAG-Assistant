@@ -15,7 +15,8 @@
     "mammoth": "^1.12.0",
     "multer": "^2.2.0",
     "pdf-parse": "^2.4.5",
-    "tavily": "^2.0.0"
+    "tavily": "^2.0.0",
+    "uuid": "^14.0.1"
   },
   "name": "llms",
   "version": "1.0.0",
