@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { askQuestion } from "../api/chat";
 import { useNavigate } from "react-router-dom";
+import { getMe, logout } from "../api/auth";
+import api from "../api/axios";
+import ReactMarkdown from "react-markdown";
 
 function UserPage() {
   const [messages, setMessages] = useState([
@@ -8,12 +11,33 @@ function UserPage() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null); 
   const bottomRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const checkUser = async () => {
+      const data = await getMe();
+      console.log("User data:", data); 
+      if (data) setUser(data);
+    };
+    checkUser();
+  }, []);
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setUser(null);
+      navigate("/chat");
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -55,12 +79,29 @@ function UserPage() {
           <p className="font-semibold text-gray-800 text-sm">Gnapi Assistant</p>
         </div>
 
-        <button
-          onClick={() => navigate("/login")}
-          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-        >
-          Login
-        </button>
+        <div className="flex items-center gap-3">
+          {user ? (
+            <>
+              {/* ✅ Show email */}
+              <span className="text-sm text-gray-600 font-medium">{user.email}</span>
+              {/* ✅ Logout button */}
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            // ✅ Login button when not logged in
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+            >
+              Login
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -76,15 +117,15 @@ function UserPage() {
               </div>
             )}
 
-            <div
-              className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap shadow-sm
-                ${msg.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-none"
-                  : "bg-white text-gray-800 rounded-bl-none"
-                }`}
-            >
-              {msg.text}
-            </div>
+<div
+  className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm shadow-sm
+    ${msg.role === "user"
+      ? "bg-blue-600 text-white rounded-br-none"
+      : "bg-white text-gray-800 rounded-bl-none"
+    }`}
+>
+  <ReactMarkdown>{msg.text}</ReactMarkdown>
+</div>
 
             {msg.role === "user" && (
               <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold ml-2 mt-1 shrink-0">

@@ -6,6 +6,7 @@ import Login from './Page/Login'
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom"
 import AdminPage from './Page/AdminPage'
 import UserPage from './Page/UserPage'
+import ProtectedRoute from './Components/ProtectedRoute'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Navigate to="/chat" />} /> 
         <Route path="/login"  element = {<Login/>}/>
         <Route path="/chat" element={<UserPage />} />
+        <Route path="/admin" element={<ProtectedRoute allowedRole="ADMIN"><AdminPage /></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
   )

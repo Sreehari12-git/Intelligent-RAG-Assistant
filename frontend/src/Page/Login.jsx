@@ -16,6 +16,7 @@ function Login() {
     setError("");
     try {
       const data = await loginUser(email, password);
+
       if (data.role === "ADMIN") {
         navigate('/admin')
       } else {

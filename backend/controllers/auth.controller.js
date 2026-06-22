@@ -7,6 +7,10 @@ const prisma = new PrismaClient();
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(email);
+    console.log(password);
+    
+    
 
     const user = await prisma.users.findUnique({
       where: { email }
@@ -62,4 +66,31 @@ export const login = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
+
+export const getMe = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken;
+    
+    if (!token) {
+      return res.status(401).json({ user: null });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    
+    res.json({ 
+      email: decoded.email,
+      role: decoded.role,
+      id: decoded.id
+    });
+
+  } catch (err) {
+    res.status(401).json({ user: null });
+  }
+};
+
+export const logout = async (req, res) => {
+  res.clearCookie("accessToken");   
+  res.clearCookie("refreshToken");  
+  res.json({ message: "Logged out successfully" });
 };
