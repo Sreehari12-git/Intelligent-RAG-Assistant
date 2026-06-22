@@ -51,3 +51,4 @@ chromadb/
 
 # Cache files
 .cache/
+/generated/prisma
