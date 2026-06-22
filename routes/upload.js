@@ -23,12 +23,6 @@ router.post("/upload", upload.array("files",10), async (req, res) => {
       return res.status(400).json({ error: "No file uploaded." });
     }
 
-    // const filePath = req.file.path;
-    // console.log("File saved at:", filePath); 
-
-    // const docs = await loadDocument(filePath);
-    // const totalChunks = await indexDocument(docs);
-
     let totalChunks = 0;
     for(const file of req.files) {
       const filePath = file.path;
