@@ -60,7 +60,8 @@ export const login = async (req, res) => {
 
     res.json({
       message: "Login successful",
-      role: user.role
+      role: user.role,
+      accessToken: accessToken
     });
 
   } catch (err) {

@@ -70,7 +70,6 @@ function UserPage() {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
 
-      {/* Header */}
       <div className="bg-white shadow px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
@@ -82,9 +81,7 @@ function UserPage() {
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              {/* ✅ Show email */}
               <span className="text-sm text-gray-600 font-medium">{user.email}</span>
-              {/* ✅ Logout button */}
               <button
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
@@ -93,7 +90,6 @@ function UserPage() {
               </button>
             </>
           ) : (
-            // ✅ Login button when not logged in
             <button
               onClick={() => navigate("/login")}
               className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
@@ -104,7 +100,6 @@ function UserPage() {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((msg, i) => (
           <div
@@ -135,7 +130,6 @@ function UserPage() {
           </div>
         ))}
 
-        {/* Loading bubble */}
         {loading && (
           <div className="flex justify-start">
             <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold mr-2 mt-1 shrink-0">
@@ -154,7 +148,6 @@ function UserPage() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <div className="bg-white border-t px-4 py-3 flex items-end gap-3">
         <textarea
           rows={1}

@@ -28,10 +28,10 @@ function AdminPage() {
 
     try {
       const data = await uploadDocuments(files);
-      setMessage(`✅ ${data.message} — ${data.chunks} chunks indexed`);
+      setMessage(`${data.message} — ${data.chunks} chunks indexed`);
       setFiles([]);
     } catch (err) {
-      setError("❌ Upload failed. Please try again.");
+      setError("Upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
@@ -49,8 +49,6 @@ function AdminPage() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-
-      {/* Header */}
       <div className="bg-white shadow px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
@@ -86,7 +84,6 @@ function AdminPage() {
             />
           </label>
 
-          {/* Selected Files */}
           {files.length > 0 && (
             <div className="mt-4 space-y-2">
               <p className="text-sm font-medium text-gray-700">{files.length} file(s) selected:</p>
@@ -99,7 +96,6 @@ function AdminPage() {
             </div>
           )}
 
-          {/* Success / Error */}
           {message && (
             <p className="mt-4 text-sm text-green-600 bg-green-50 border border-green-200 px-4 py-2 rounded-lg">
               {message}
@@ -111,7 +107,6 @@ function AdminPage() {
             </p>
           )}
 
-          {/* Upload Button */}
           <button
             onClick={handleUpload}
             disabled={uploading || files.length === 0}

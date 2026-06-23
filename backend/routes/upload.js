@@ -26,9 +26,10 @@ router.post("/upload", upload.array("files",10), async (req, res) => {
     let totalChunks = 0;
     for(const file of req.files) {
       const filePath = file.path;
+      const fileName = file.originalname;
       console.log("File saved at : ", filePath);
       const docs = await loadDocument(filePath);
-      const chunks = await indexDocument(docs);
+      const chunks = await indexDocument(docs,fileName);
       totalChunks += chunks;
     }
     console.log(`Stored ${totalChunks} chunks`);
