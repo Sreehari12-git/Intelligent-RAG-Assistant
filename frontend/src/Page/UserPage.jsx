@@ -15,14 +15,14 @@ function UserPage() {
   const bottomRef = useRef(null);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   let deviceId = localStorage.getItem("deviceId");
+  useEffect(() => {
+    let deviceId = localStorage.getItem("deviceId");
 
-  //   if(!deviceId) {
-  //     deviceId = crypto.randomUUID();
-  //     localStorage.setItem("deviceId", deviceId);
-  //   }
-  // },[])
+    if(!deviceId) {
+      deviceId = crypto.randomUUID();
+      localStorage.setItem("deviceId", deviceId);
+    }
+  },[])
 
   useEffect(() => {
     const checkUser = async () => {
@@ -51,13 +51,15 @@ function UserPage() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
+    const deviceId = localStorage.getItem("deviceId");
+    
     const userMessage = { role: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
     try {
-      const answer = await askQuestion({question: input});
+      const answer = await askQuestion({question: input, deviceId});
       setMessages((prev) => [...prev, { role: "bot", text: answer }]);
     } catch (err) {
       setMessages((prev) => [
