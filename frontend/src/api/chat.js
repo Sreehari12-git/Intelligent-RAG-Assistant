@@ -1,8 +1,8 @@
 import api from "./axios";
 
-export const askQuestion = async (question) => {
+export const askQuestion = async ({question, deviceId}) => {
     try {
-        const response = await api.post("/ask", { question }, { 
+        const response = await api.post("/ask", { question, deviceId }, { 
             responseType: "text"
         });
 

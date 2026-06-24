@@ -18,11 +18,9 @@ function UploadPage() {
       setError("Please select at least one file.");
       return;
     }
-
     setUploading(true);
     setMessage(null);
     setError(null);
-
     try {
       const data = await uploadDocuments(files);
       setMessage(`${data.message} — ${data.chunks} chunks indexed`);
@@ -35,7 +33,7 @@ function UploadPage() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-lg">
+    <div className="bg-white rounded-2xl shadow-lg p-8 w-full">
       <h2 className="text-xl font-bold text-gray-800 mb-1">Upload Documents</h2>
       <p className="text-sm text-gray-500 mb-6">Upload PDF files to index them for the chatbot</p>
 

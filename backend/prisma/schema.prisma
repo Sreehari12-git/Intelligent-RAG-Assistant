@@ -26,3 +26,11 @@ enum Role {
   USER
 }
 
+model ChatHistory {
+  id Int @id @default(autoincrement())
+  deviceId String
+  question String
+  answer String
+  createdAt DateTime @default(now())
+}
+

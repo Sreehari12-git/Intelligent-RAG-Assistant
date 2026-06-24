@@ -7,13 +7,22 @@ import ReactMarkdown from "react-markdown";
 
 function UserPage() {
   const [messages, setMessages] = useState([
-    { role: "bot", text: "Hi! Ask me anything about your documents." }
+    { role: "bot", text: "Hi! Ask me anything." }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null); 
   const bottomRef = useRef(null);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   let deviceId = localStorage.getItem("deviceId");
+
+  //   if(!deviceId) {
+  //     deviceId = crypto.randomUUID();
+  //     localStorage.setItem("deviceId", deviceId);
+  //   }
+  // },[])
 
   useEffect(() => {
     const checkUser = async () => {
@@ -48,7 +57,7 @@ function UserPage() {
     setLoading(true);
 
     try {
-      const answer = await askQuestion(input);
+      const answer = await askQuestion({question: input});
       setMessages((prev) => [...prev, { role: "bot", text: answer }]);
     } catch (err) {
       setMessages((prev) => [

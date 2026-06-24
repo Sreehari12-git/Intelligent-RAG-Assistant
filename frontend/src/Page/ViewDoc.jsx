@@ -37,7 +37,7 @@ function ViewDoc() {
   if (error) return <p className="text-sm text-red-500">{error}</p>;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-lg">
+    <div className="bg-white rounded-2xl shadow-lg p-8 w-full">
       <h2 className="text-xl font-bold text-gray-800 mb-1">Documents</h2>
       <p className="text-sm text-gray-500 mb-6">All indexed documents</p>
 

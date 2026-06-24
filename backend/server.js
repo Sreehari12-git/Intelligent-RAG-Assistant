@@ -1,11 +1,11 @@
 import express from "express"
 import uploadRoutes from "./routes/upload.js"
-import askRoutes from "./routes/chatRoute.js"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import authRoutes from "./routes/auth.routes.js"
 import deleteRoutes from "./routes/delete.routes.js"
 import viewRoutes from "./routes/view.routes.js"
+import askRoutes from "./routes/chat.routes.js"
 import cors from "cors"
 
 dotenv.config()
@@ -21,8 +21,8 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use("/", uploadRoutes);
-app.use("/", askRoutes);
 app.use("/auth", authRoutes);
+app.use("/", askRoutes)
 app.use("/document", deleteRoutes);
 app.use("/document", viewRoutes)
 

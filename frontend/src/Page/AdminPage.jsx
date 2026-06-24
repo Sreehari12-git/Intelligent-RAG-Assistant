@@ -19,7 +19,6 @@ function AdminPage() {
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
-
       <div className="flex-1 flex flex-col">
         <div className="bg-white shadow px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -35,8 +34,7 @@ function AdminPage() {
             Logout
           </button>
         </div>
-
-        <div className="flex-1 flex items-center justify-center px-4">
+        <div className="flex-1 overflow-auto p-8">
           <Outlet />
         </div>
       </div>
