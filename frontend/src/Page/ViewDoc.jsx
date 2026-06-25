@@ -21,17 +21,18 @@ function ViewDoc() {
     fetchDocuments();
   }, []);
 
-  const handleDelete = async (fileName) => {
-    setDeletingFile(fileName);
-    try {
-      await deleteDocument(fileName);
-      setFiles(files.filter((f) => f !== fileName));
-    } catch (err) {
-      setError("Failed to delete document.");
-    } finally {
-      setDeletingFile(null);
-    }
-  };
+const handleDelete = async (fileName) => {
+  setDeletingFile(fileName);
+  try {
+    await deleteDocument(fileName);
+    setFiles((prev) => prev.filter((f) => f !== fileName)); // use functional update
+  } catch (err) {
+    setError("Failed to delete document.");
+    setDeletingFile(null); // explicitly reset on error
+  } finally {
+    setDeletingFile(null);
+  }
+};
 
   if (loading) return <p className="text-sm text-gray-500">Loading documents...</p>;
   if (error) return <p className="text-sm text-red-500">{error}</p>;

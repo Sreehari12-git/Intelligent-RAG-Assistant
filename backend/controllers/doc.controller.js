@@ -48,7 +48,7 @@ export const listDocuments = async(req,res) => {
         const collection = await getCollection();
         const results = await collection.get();
 
-        const files = [...new Set(results.metadatas.map(meta => meta.fileName))]
+        const files = [...new Set(results.metadatas.map(meta => meta.fileName).filter(Boolean))]
 
         res.json({files});
     }

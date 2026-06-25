@@ -16,3 +16,14 @@ export const askQuestion = async ({question, deviceId}) => {
     }
 }
 
+
+export const getChatHistory = async (deviceId) => {
+    try {
+        const response = await api.get(`/history?deviceId=${deviceId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+

@@ -6,9 +6,9 @@ export const viewDocuments = async() => {
     return res.data;
 }
 
-export const deleteDocument = async (fileName) => {
-    const res = await api.delete("/document/delete", {
-        data: { fileName }
-    });
-    return res.data;
+export async function deleteDocument(fileName) {
+  const res = await fetch(`/api/delete/${fileName}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Delete failed"); 
+  return res.json();
 }
+

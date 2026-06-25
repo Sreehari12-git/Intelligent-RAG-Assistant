@@ -2,8 +2,21 @@ import { retrieveContext } from "./retrieveContext.js";
 import { model } from "../config/llm.js";
 import { searchWeb } from "./tavilyService.js";
 import { indexWebResults } from "./indexWebResults.js";
+import { classifyIntent, getChitchatResponse } from "./intentRouter.js";
+
 
 export async function askQuestion(question) {
+
+    const intent = await classifyIntent(question);
+
+    if(intent === "chitchat") {
+        const answer = await getChitchatResponse(question);
+        return {
+            question,
+            answer,
+            source: "chitchat"
+        }
+    }
 
     let docs = await retrieveContext(question);
 
