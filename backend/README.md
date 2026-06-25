@@ -5,11 +5,14 @@ A **Node.js** based Retrieval‑Augmented Generation (RAG) assistant that levera
 ---
 
 ## ✨ Features
-- 📄 **Document ingestion** – upload PDFs, Word files, or plain text via the `/upload` endpoint.
-- 🧠 **Vector store** – embeddings are stored in a local **Chroma** collection for fast similarity search.
-- 🤖 **LLM powered** – uses **Google Gemini** (via `@google/genai`) or any OpenAI compatible model through LangChain.
-- 🔍 **Hybrid search** – combines vector similarity with optional keyword filtering via **Tavily**.
-- 🛠️ **Extensible** – modular service layout (`services/`, `routes/`, `config/`).
+- 📄 **Document ingestion** – Upload files (PDFs, Word documents, text files, etc.) via the `/upload` endpoint.
+- 🧠 **Vector store** – Document embeddings are generated using `@langchain/google-genai` and stored in a **Chroma** collection for fast similarity search.
+- 🤖 **LLM powered** – Uses **Google Gemini** (via `@langchain/google-genai`) to generate context-aware answers.
+- 🔀 **Intent Routing** – Automatically classifies user prompts into **chitchat** (greetings, small talk) or **query** (factual/search queries) using a hybrid rule-based and LLM classifier.
+- 🔍 **Hybrid search / Web Fallback** – Combines vector similarity search with automated web search via **Tavily** when the uploaded documents do not contain relevant context. Web search results are indexed dynamically for future queries.
+- 🕒 **Chat History** – Saves chat interactions mapped to a device ID (`deviceId`) into a PostgreSQL database using **Prisma ORM**.
+- 🔐 **Authentication & RBAC** – Secure user management using JWT access and refresh tokens stored in HttpOnly cookies, with Role-Based Access Control (`ADMIN` vs `USER`).
+- 🛠️ **Extensible** – Modular layout separating controllers, routes, loaders, and services.
 
 ---
 
@@ -17,56 +20,72 @@ A **Node.js** based Retrieval‑Augmented Generation (RAG) assistant that levera
 ### Prerequisites
 - **Node.js** (>= 18)
 - **npm** (>= 9)
-- A **Google Gemini API key** (or OpenAI key if you switch the provider).
+- **PostgreSQL** database (for Prisma chat history & user management)
+- A **Google Gemini API key**
+- A **Tavily API key** (for web fallback search)
+- A **Chroma** cloud/self-hosted instance and credentials
 
 ### Installation
 ```bash
-# Clone the repo (if you haven't already)
+# Clone the repository
 git clone https://github.com/your‑org/Intelligent‑RAG‑Assistant.git
-cd Intelligent‑RAG‑Assistant
+cd Intelligent‑RAG‑Assistant/backend
 
 # Install dependencies
 npm install
 ```
 
+### Database Migration
+Ensure PostgreSQL is running and your `DATABASE_URL` is set, then generate and run database migrations:
+```bash
+npx prisma migrate dev --name init
+npx prisma generate
+```
+
 ### Configuration
-Create a `.env` file in the project root (you already have one) with the following keys:
+Create/update the `.env` file in the `backend` directory with the following keys:
+```env
+PORT=3000
+GEMINI_API_KEY=your_gemini_api_key
+CHROMA_API_KEY=your_chroma_api_key
+CHROMA_TENANT=your_chroma_tenant_id
+CHROMA_DATABASE=your_chroma_database_name
+TAVILY_API_KEY=your_tavily_api_key
+DATABASE_URL="postgresql://username:password@localhost:5432/rag"
+JWT_ACCESS_SECRET="your_jwt_access_secret"
+JWT_REFRESH_SECRET="your_jwt_refresh_secret"
+FRONTEND_URL="http://localhost:4000"
 ```
-PORT=5000                # Port for the Express server
-GOOGLE_API_KEY=your_key   # Google Gemini API key
-CHROMA_PATH=./chroma     # Path where Chroma stores the collection
-```
-Adjust values as needed.
 
 ### Run the server
 ```bash
-npm start   # or: node server.js
+# Start the server (runs server.js)
+npm start
 ```
-The server will listen on the port defined in `.env`.
 
 ---
 
 ## 📡 API Endpoints
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/upload` | Accepts multipart file upload. Stores the document, creates embeddings, and adds them to the Chroma collection. |
-| `POST` | `/chat`   | Takes a JSON body `{ "question": "..." }` and returns a generated answer based on the uploaded documents. |
 
-> **Note**: The routes are defined in `routes/upload.js` and `routes/chatRoute.js`.
+### 🔑 Authentication
+| Method | Path | Auth Required | Description |
+|--------|------|---------------|-------------|
+| `POST` | `/auth/login` | None | Authenticates user, setting JWT tokens in secure HttpOnly cookies. |
+| `GET` | `/auth/me` | None | Retrieves user profile details if a valid token session exists. |
+| `POST` | `/auth/logout` | None | Clears authentication cookies. |
 
----
+### 📄 Ingestion & Chat
+| Method | Path | Auth Required | Description |
+|--------|------|---------------|-------------|
+| `POST` | `/upload` | None | Accepts multipart file uploads. Stores, splits, embeds, and indexes documents into ChromaDB. |
+| `POST` | `/ask` | None | Processes `{ question, deviceId }`. Classifies intent, retrieves context, queries the LLM, logs history to database, and returns the response. |
+| `GET` | `/history` | None | Retrieves chat history using `?deviceId=...`. |
 
-## 🛠️ Development
-- **Hot‑reloading** – use `npm run dev` with a tool like `nodemon` (add to `scripts` if desired).
-- **Adding new loaders** – place a new file under `loaders/` and export a function that returns `Document[]`.
-- **Changing LLM provider** – modify `services/llmService.js` to swap the underlying LangChain model.
-
----
-
-## 📦 Deployment
-1. Build a Docker image (example Dockerfile is provided in the repo).
-2. Push the image to your container registry.
-3. Deploy to any cloud platform that supports containers (AWS ECS, GCP Cloud Run, Azure Container Apps, etc.).
+### 🛠️ Document Management (Admin only)
+| Method | Path | Auth Required | Description |
+|--------|------|---------------|-------------|
+| `GET` | `/document/view-all` | Yes (`ADMIN` role) | Lists all document filenames currently indexed in the vector database. |
+| `DELETE` | `/document/delete` | Yes (`ADMIN` role) | Deletes all chunks/records associated with a given `fileName` (body: `{ fileName }`). |
 
 ---
 
@@ -76,4 +95,4 @@ Contributions are welcome! Please open an issue or pull request.
 ---
 
 ## 📄 License
-This project is licensed under the **ISC** license – see the `LICENSE` file for details.
+This project is licensed under the **ISC** license.
