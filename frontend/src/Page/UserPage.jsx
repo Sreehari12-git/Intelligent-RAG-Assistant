@@ -3,6 +3,8 @@ import { askQuestion, getChatHistory } from "../api/chat";
 import { useNavigate } from "react-router-dom";
 import { getMe, logout } from "../api/auth";
 import ReactMarkdown from "react-markdown";
+import Login from "./Login";
+import Modal from "./Modal";
 
 const SUGGESTIONS = ["Summarise this document", "Key takeaways?", "Compare Q2 vs Q3"];
 
@@ -17,6 +19,7 @@ function UserPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const bottomRef = useRef(null);
   const textareaRef = useRef(null);
   const navigate = useNavigate();
@@ -73,6 +76,14 @@ function UserPage() {
     } finally {
       setUser(null);
       navigate("/chat");
+    }
+  };
+
+  const handleLoginSuccess = (data) => {
+    setUser(data);
+    setShowLoginModal(false);
+    if (data.role === "ADMIN") {
+      navigate("/admin");
     }
   };
 
@@ -145,7 +156,7 @@ function UserPage() {
             </>
           ) : (
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => setShowLoginModal(true)}
               className="text-sm font-medium text-white bg-[#6C5CE7] hover:bg-[#5A4DD4] px-4 py-1.5 rounded-lg transition-colors"
             >
               Sign in as Admin
@@ -269,6 +280,12 @@ function UserPage() {
           <kbd className="font-mono bg-[#252340] border border-[#3D3860] rounded px-1 py-0.5 text-[10px] text-[#6B6A8A]">Shift+Enter</kbd> for new line
         </p>
       </footer>
+
+      {showLoginModal && (
+        <Modal onClose={() => setShowLoginModal(false)}>
+          <Login onSuccess={handleLoginSuccess} onClose={() => setShowLoginModal(false)} />
+        </Modal>
+      )}
     </div>
   );
 }

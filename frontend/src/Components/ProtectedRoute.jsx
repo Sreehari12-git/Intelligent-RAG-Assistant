@@ -24,7 +24,7 @@ function ProtectedRoute({ children, allowedRole }) {
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/chat" />;
   }
 
   if (allowedRole && user.role !== allowedRole) {
