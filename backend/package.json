@@ -1,14 +1,27 @@
 {
   "dependencies": {
+    "@google/genai": "^2.8.0",
     "@langchain/community": "^1.1.29",
     "@langchain/core": "^1.1.49",
     "@langchain/google-genai": "^2.1.31",
     "@langchain/openai": "^1.4.7",
     "@langchain/textsplitters": "^1.0.1",
+    "@prisma/client": "^6.19.3",
+    "@tavily/core": "^0.7.6",
+    "bcrypt": "^6.0.0",
     "chromadb": "^3.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "deepagents": "^1.10.2",
     "dotenv": "^16.4.5",
-    "langchain": "^1.4.5"
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "langchain": "^1.4.5",
+    "mammoth": "^1.12.0",
+    "multer": "^2.2.0",
+    "pdf-parse": "^2.4.5",
+    "tavily": "^2.0.0",
+    "uuid": "^14.0.1"
   },
   "name": "llms",
   "version": "1.0.0",
@@ -20,5 +33,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prisma": "^6.19.3"
+  }
 }
